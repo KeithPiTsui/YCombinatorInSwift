@@ -116,10 +116,25 @@ let PiY2 = Y2({ g in
           let temp: Decimal = pow(-1, intI) / (2 * i - 1)
           let nextN: Decimal = n - 1
           let nextI: Decimal = i + 1
-          return n == 0 ? acc : g() (acc - temp) (nextN) (nextI)
+          if n == 0 {return acc}
+          let t = acc - temp;
+          let gg = g()
+          return gg (t)(nextN)(nextI)
         }
       }
   }
-})(0)(10)(1)
+})(0)(10000)(1)
 print("Pi is \(PiY2 * 4)")
+
+//func calcPi(_ n: Int) -> Decimal {
+//  var acc: Decimal = 0, i: Int = 1;
+//  while (i < n) {
+//    let temp: Decimal = pow(-1, i) / Decimal(2 * i - 1)
+//    acc -= temp
+//    i += 1
+//  }
+//  return acc
+//}
+//
+//print("Pi is \(calcPi(100000000)*4)")
 
