@@ -26,22 +26,42 @@ func I<A, B>(_ x: A, _:B) -> A {
 }
 
 
-func Y<A>(_ f: @escaping ( @autoclosure () -> A) -> A) -> A {
-  return f(Y(f))
-}
+//func Y<A>(_ f: @escaping ( @autoclosure () -> A) -> A) -> A {
+//  return f(Y(f))
+//}
 
 func Y_<A, B>(_ f: @escaping (@escaping (B) -> A) -> (B) -> A )
 -> (B) -> A {
   return { (x:B) in f(Y_(f))(x) }
 }
 
-print("hihihi")
+func Y<A, B>(_ f: @escaping (@escaping (B) -> A) -> (B) -> A )
+-> (B) -> A {
+  return f(Y(f))
+}
 
-let fibonacci = Y_({ f in
+func Y__<A, B>(_ f: @escaping (@escaping @autoclosure () -> (B) -> A) -> (B) -> A )
+-> (B) -> A {
+  return f(Y__(f))
+}
+
+print("------------------------")
+
+let factorial__ = Y__({ g in
+  return { (acc: Int) in
+      return { (x: Int) in
+        x == 0 ? acc : g() (acc * x) (x - 1)
+      }
+  }
+})(1)(5)
+
+print("Factorail with Y__ is \(factorial__)")
+
+let fibonacci = Y_({ g in
   return { (a: Int) in
     return { (b: Int) in
       return { (x: Int) in
-        x == 0 ? a : f(b) (a + b) (x - 1)
+        x == 0 ? a : g(b) (a + b) (x - 1)
       }
     }
   }
@@ -49,10 +69,10 @@ let fibonacci = Y_({ f in
 
 print("fibonacci of 10 is \(fibonacci(10))")
 
-let factorial = Y_({ f in
+let factorial = Y_({ g in
   return { (acc: Int) in
       return { (x: Int) in
-        x == 0 ? acc : f (acc * x) (x - 1)
+        x == 0 ? acc : g (acc * x) (x - 1)
       }
   }
 })(1)
